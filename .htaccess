@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteRule ^admin$ index.php?page=admin [L,QSA]
+RewriteRule ^admin/$ index.php?page=admin [L,QSA]

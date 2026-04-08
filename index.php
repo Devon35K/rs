@@ -1,7 +1,8 @@
 <?php
 session_start();
 define('BASE_PATH', __DIR__);
-define('BASE_URL', '/rs/');
+$scriptDir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+define('BASE_URL', $scriptDir === '' ? '/' : $scriptDir . '/');
 
 // Load environment variables from .env file (for local development)
 if (file_exists(BASE_PATH . '/.env')) {

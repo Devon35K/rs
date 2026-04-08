@@ -3,6 +3,24 @@ session_start();
 define('BASE_PATH', __DIR__);
 define('BASE_URL', '/rs/');
 
+// Load environment variables from .env file (for local development)
+if (file_exists(BASE_PATH . '/.env')) {
+    $lines = file(BASE_PATH . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos(trim($line), '#') === 0) continue;
+        if (strpos($line, '=') !== false) {
+            [$name, $value] = explode('=', $line, 2);
+            $name = trim($name);
+            $value = trim($value);
+            if (!array_key_exists($name, $_SERVER) && !array_key_exists($name, $_ENV)) {
+                putenv(sprintf('%s=%s', $name, $value));
+                $_ENV[$name] = $value;
+                $_SERVER[$name] = $value;
+            }
+        }
+    }
+}
+
 require_once BASE_PATH . '/database.php';
 require_once BASE_PATH . '/User.php';
 require_once BASE_PATH . '/Announcement.php';

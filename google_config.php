@@ -11,12 +11,12 @@
  * ─────────────────────────────────────────────────────────────
  */
 
-define('GOOGLE_CLIENT_ID',     'YOUR_GOOGLE_CLIENT_ID_HERE');
-define('GOOGLE_CLIENT_SECRET', 'YOUR_GOOGLE_CLIENT_SECRET_HERE');
-define('GOOGLE_REDIRECT_URI',  'http://localhost/rs/index.php?page=google-callback');
+define('GOOGLE_CLIENT_ID',     getenv('GOOGLE_CLIENT_ID') ?: 'YOUR_GOOGLE_CLIENT_ID_HERE');
+define('GOOGLE_CLIENT_SECRET', getenv('GOOGLE_CLIENT_SECRET') ?: 'YOUR_GOOGLE_CLIENT_SECRET_HERE');
+define('GOOGLE_REDIRECT_URI',  getenv('GOOGLE_REDIRECT_URI') ?: 'http://localhost/rs/index.php?page=google-callback');
 
 /**
  * Only allow logins from this hosted domain (Google Workspace).
  * Change this if your institution uses a different domain.
  */
-define('GOOGLE_ALLOWED_DOMAIN', 'usep.edu.ph');
+define('GOOGLE_ALLOWED_DOMAIN', getenv('GOOGLE_ALLOWED_DOMAIN') ?: 'usep.edu.ph');

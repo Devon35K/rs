@@ -1,8 +1,8 @@
 -- AcadPortal Database Schema
 -- Run this in your MySQL client or phpMyAdmin
 
-CREATE DATABASE IF NOT EXISTS acadportal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE acadportal;
+-- CREATE DATABASE IF NOT EXISTS acadportal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- USE acadportal;
 
 -- Users table
 CREATE TABLE IF NOT EXISTS users (

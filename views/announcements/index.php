@@ -24,17 +24,26 @@ $canPost = in_array($_SESSION['user_role'] ?? '', ['admin', 'faculty']);
 
 <!-- ── ANNOUNCEMENTS GRID ── -->
 <section class="admin-section">
-    <div class="admin-section-header">
+    <div class="admin-section-header" style="flex-wrap:wrap; gap:0.75rem;">
         <div>
             <h2 class="admin-section-title">Recent Announcements</h2>
-            <p class="admin-section-sub"><?= count($announcements) ?> post<?= count($announcements) !== 1 ? 's' : '' ?> available</p>
+            <p class="admin-section-sub" id="announceCount"><?= count($announcements) ?> post<?= count($announcements) !== 1 ? 's' : '' ?> available</p>
         </div>
-        <?php if ($canPost): ?>
-        <button class="admin-btn-primary" onclick="openModal('announcementModal')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            New Post
-        </button>
-        <?php endif; ?>
+        <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+            <div class="memo-searchbox">
+                <svg class="memo-searchbox-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="announceSearch" class="memo-searchbox-input" placeholder="Search announcements…" oninput="filterAnnouncements()">
+                <button class="memo-searchbox-clear" id="announceSearchClear" onclick="clearAnnounceSearch()" title="Clear" style="display:none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <?php if ($canPost): ?>
+            <button class="admin-btn-primary" onclick="openModal('announcementModal')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                New Post
+            </button>
+            <?php endif; ?>
+        </div>
     </div>
 
     <?php if (empty($announcements)): ?>
@@ -46,9 +55,14 @@ $canPost = in_array($_SESSION['user_role'] ?? '', ['admin', 'faculty']);
         <?php endif; ?>
     </div>
     <?php else: ?>
-    <div class="announce-grid">
+    <div class="announce-grid" id="announceGrid">
         <?php foreach ($announcements as $a): ?>
-        <article class="announce-card" style="cursor: pointer; transition: transform 0.2s; position:relative;" onclick='openViewAnnouncementModal(<?= htmlspecialchars(json_encode($a), ENT_QUOTES, "UTF-8") ?>)' onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+        <article class="announce-card"
+            data-title="<?= strtolower(htmlspecialchars($a['title'])) ?>"
+            data-body="<?= strtolower(htmlspecialchars(mb_substr($a['body'], 0, 300))) ?>"
+            style="cursor: pointer; transition: transform 0.2s; position:relative;"
+            onclick='openViewAnnouncementModal(<?= htmlspecialchars(json_encode($a), ENT_QUOTES, "UTF-8") ?>)'
+            onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
             <div class="announce-thumb">
                 <?php if (!empty($a['cover_image'])): ?>
                 <img src="<?= BASE_URL . htmlspecialchars($a['cover_image']) ?>" alt="">
@@ -155,6 +169,25 @@ function openModal(id) {
 }
 function closeModal(id) {
     document.getElementById(id).style.display = 'none';
+}
+
+/* ── Announcement Search ── */
+function filterAnnouncements() {
+    const q = (document.getElementById('announceSearch')?.value || '').toLowerCase().trim();
+    const clr = document.getElementById('announceSearchClear');
+    if (clr) clr.style.display = q ? 'flex' : 'none';
+    let visible = 0;
+    document.querySelectorAll('.announce-card').forEach(card => {
+        const match = !q || card.dataset.title.includes(q) || card.dataset.body.includes(q);
+        card.style.display = match ? '' : 'none';
+        if (match) visible++;
+    });
+    const label = document.getElementById('announceCount');
+    if (label) label.textContent = visible + ' post' + (visible !== 1 ? 's' : '') + ' available';
+}
+function clearAnnounceSearch() {
+    document.getElementById('announceSearch').value = '';
+    filterAnnouncements();
 }
 
 function openViewAnnouncementModal(data) {

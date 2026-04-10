@@ -1,4 +1,4 @@
-# 🎓 AcadPortal
+# 🎓 BSIT DEPARTMENT - ACADEMIC RESOURCE MANAGEMENT SYSTEM
 
 > A web-based platform for managing and sharing academic resources in educational institutions — built with PHP MVC (no framework), MySQL, and vanilla CSS/JS.
 
@@ -25,7 +25,7 @@
 
 ## 📖 Project Overview
 
-**AcadPortal** is a digital academic resource management system designed for schools and universities. It serves as a centralized platform where faculty can upload lecture materials and memoranda, administrators can manage users and monitor activity, and students can access all shared resources — all in one organized, secure portal.
+**BSIT DEPARTMENT - ACADEMIC RESOURCE MANAGEMENT SYSTEM** is a digital academic resource management system designed for schools and universities. It serves as a centralized platform where faculty can upload lecture materials and memoranda, administrators can manage users and monitor activity, and students can access all shared resources — all in one organized, secure portal.
 
 Think of it as a **digital library and bulletin board** for your institution, accessible from any device through a web browser.
 
@@ -63,7 +63,7 @@ A dashboard visible only to administrators. Displays key statistics: total regis
 
 ## 🌐 Guest Public Page
 
-AcadPortal includes a **public-facing guest page** that is fully accessible without logging in. This page is intended for walk-in visitors, prospective students, parents, or anyone who needs to view institutional content without creating an account.
+The system includes a **public-facing guest page** that is fully accessible without logging in. This page is intended for walk-in visitors, prospective students, parents, or anyone who needs to view institutional content without creating an account.
 
 ### Purpose
 
@@ -141,7 +141,7 @@ Documents restricted to **Faculty Only** or **Students Only** are hidden from th
 ## 📁 Project Structure
 
 ```
-acadportal/
+rs/
 ├── app/
 │   ├── Controllers/
 │   │   ├── AuthController.php          # Handles login, logout, and session management
@@ -220,13 +220,13 @@ Ensure the following are installed before proceeding:
 
 ### Step 2 — Copy Project Files
 
-Place the `acadportal/` folder inside your server's web root directory:
+Place the `rs/` folder inside your server's web root directory:
 
 | Server | Web Root Directory |
 |--------|--------------------|
-| XAMPP  | `C:/xampp/htdocs/acadportal/` |
-| WAMP   | `C:/wamp64/www/acadportal/` |
-| Laragon | `C:/laragon/www/acadportal/` |
+| XAMPP  | `C:/xampp/htdocs/rs/` |
+| WAMP   | `C:/wamp64/www/rs/` |
+| Laragon | `C:/laragon/www/rs/` |
 
 ---
 
@@ -264,7 +264,7 @@ define('DB_PASS', '');        // Your MySQL password — blank by default in XAM
 
 Start Apache and MySQL from the control panel, then open your browser to:
 ```
-http://localhost/acadportal/public/
+http://localhost/rs/public/
 ```
 
 **Option B — PHP Built-in Server via Windsurf Terminal**
@@ -280,7 +280,7 @@ http://localhost:8000
 
 **Option C — Direct URL with XAMPP Running**
 ```
-http://localhost/acadportal/public/index.php
+http://localhost/rs/public/index.php
 ```
 
 ---
@@ -299,18 +299,18 @@ http://localhost/acadportal/public/index.php
 
 ## 👥 User Roles & Permissions
 
-| Permission | Guest | Student | Faculty | Admin |
-|---|:---:|:---:|:---:|:---:|
-| View public announcements | ✅ | ✅ | ✅ | ✅ |
-| View all memoranda | ✅ | ✅ | ✅ | ✅ |
-| Download public documents | ✅ | ✅ | ✅ | ✅ |
-| View faculty/student-only content | ❌ | ✅ | ✅ | ✅ |
-| Post announcements | ❌ | ❌ | ✅ | ✅ |
-| Add memoranda | ❌ | ❌ | ✅ | ✅ |
-| Upload documents | ❌ | ❌ | ✅ | ✅ |
-| Delete any content | ❌ | ❌ | ❌ | ✅ |
-| View analytics and visit logs | ❌ | ❌ | ❌ | ✅ |
-| Manage user accounts | ❌ | ❌ | ❌ | ✅ |
+| Permission                        | Guest | Student | Faculty | Admin |
+|-----------------------------------|:-----:|:-------:|:-------:|:-----:|
+| View public announcements         |   ✅   |    ✅    |    ✅    |   ✅   |
+| View all memoranda                |   ✅   |    ✅    |    ✅    |   ✅   |
+| Download public documents         |   ✅   |    ✅    |    ✅    |   ✅   |
+| View faculty/student-only content |   ❌   |    ✅    |    ✅    |   ✅   |
+| Post announcements                |   ❌   |    ❌    |    ✅    |   ✅   |
+| Add memoranda                     |   ❌   |    ❌    |    ✅    |   ✅   |
+| Upload documents                  |   ❌   |    ❌    |    ✅    |   ✅   |
+| Delete any content                |   ❌   |    ❌    |    ❌    |   ✅   |
+| View analytics and visit logs     |   ❌   |    ❌    |    ❌    |   ✅   |
+| Manage user accounts              |   ❌   |    ❌    |    ❌    |   ✅   |
 
 ---
 
@@ -395,14 +395,14 @@ In `public/css/app.css`, find `.hero-section` and replace the Unsplash URL with 
 
 The UI is based directly on the provided design screenshots:
 
-| Page | Design Description |
-|------|--------------------|
-| **Login** | Floating white card anchored to the left, full-screen campus photo background, crimson gradient navbar across the top |
-| **Announcements** | Full-width hero banner with dark overlay and large uppercase title, scrollable card grid below with expand/collapse |
-| **Memorandum** | Clean white sortable data table with crimson header row, live search bar, and per-page row selector |
-| **Upload / Requirements** | Card grid with file type emoji icons, audience badge pills, and download/drive link buttons |
-| **Guest Page** | Same three-section layout as above pages but without login — announcements, memos, and documents stacked vertically on one page |
-| **Visit / Analytics** | Row of colored stat cards followed by a full user table and a recent activity log table |
+| Page                      | Design Description                                                                                                              |
+|---------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| **Login**                 | Floating white card anchored to the left, full-screen campus photo background, crimson gradient navbar across the top           |
+| **Announcements**         | Full-width hero banner with dark overlay and large uppercase title, scrollable card grid below with expand/collapse             |
+| **Memorandum**            | Clean white sortable data table with crimson header row, live search bar, and per-page row selector                             |
+| **Upload / Requirements** | Card grid with file type emoji icons, audience badge pills, and download/drive link buttons                                     |
+| **Guest Page**            | Same three-section layout as above pages but without login — announcements, memos, and documents stacked vertically on one page |
+| **Visit / Analytics**     | Row of colored stat cards followed by a full user table and a recent activity log table                                         |
 
 ---
 

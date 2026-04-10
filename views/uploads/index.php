@@ -29,6 +29,15 @@ $canUpload = in_array($_SESSION['user_role'] ?? '', ['admin', 'faculty']);
             <button class="memo-chip-btn" onclick="filterDocs('Faculty', this)">Faculty</button>
             <button class="memo-chip-btn" onclick="filterDocs('Student', this)">Student</button>
         </div>
+        <div class="memo-toolbar-right">
+            <div class="memo-searchbox">
+                <svg class="memo-searchbox-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="docSearch" class="memo-searchbox-input" placeholder="Search documents…" oninput="filterDocs(activeDocCat, null)">
+                <button class="memo-searchbox-clear" id="docSearchClear" onclick="clearDocSearch()" title="Clear" style="display:none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
     </div>
 
     <div class="announce-grid" id="docsGrid">
@@ -39,7 +48,9 @@ $canUpload = in_array($_SESSION['user_role'] ?? '', ['admin', 'faculty']);
             </div>
         <?php else: ?>
             <?php foreach ($documents as $doc): ?>
-            <article class="announce-card doc-card" data-category="<?= htmlspecialchars($doc['category'] ?? 'Department') ?>">
+            <article class="announce-card doc-card"
+                data-category="<?= htmlspecialchars($doc['category'] ?? 'Department') ?>"
+                data-title="<?= strtolower(htmlspecialchars($doc['title'])) ?>">
                 <div class="announce-body" style="padding: 1.5rem;">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 1rem;">
                         <?php if (!empty($doc['drive_link'])): ?>
@@ -132,6 +143,8 @@ $canUpload = in_array($_SESSION['user_role'] ?? '', ['admin', 'faculty']);
 <?php endif; ?>
 
 <script>
+let activeDocCat = 'All';
+
 function openModal(id) {
     document.getElementById(id).style.display = 'flex';
 }
@@ -139,18 +152,25 @@ function closeModal(id) {
     document.getElementById(id).style.display = 'none';
 }
 function filterDocs(cat, btn) {
-    // Styling
-    document.querySelectorAll('.memo-chip-btn').forEach(b => b.classList.remove('memo-chip-active'));
-    btn.classList.add('memo-chip-active');
-    
+    if (cat !== null) activeDocCat = cat;
+    const q = (document.getElementById('docSearch')?.value || '').toLowerCase().trim();
+    const clr = document.getElementById('docSearchClear');
+    if (clr) clr.style.display = q ? 'flex' : 'none';
+    // Styling chips
+    if (btn) {
+        document.querySelectorAll('.memo-chip-btn').forEach(b => b.classList.remove('memo-chip-active'));
+        btn.classList.add('memo-chip-active');
+    }
     // Filtering
     document.querySelectorAll('.doc-card').forEach(card => {
-        if (cat === 'All' || card.dataset.category === cat) {
-            card.style.display = 'block';
-        } else {
-            card.style.display = 'none';
-        }
+        const matchCat = activeDocCat === 'All' || card.dataset.category === activeDocCat;
+        const matchQ   = !q || card.dataset.title.includes(q);
+        card.style.display = (matchCat && matchQ) ? '' : 'none';
     });
+}
+function clearDocSearch() {
+    document.getElementById('docSearch').value = '';
+    filterDocs(activeDocCat, null);
 }
 window.onclick = function(event) {
     let mod = document.getElementById('uploadModal');

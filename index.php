@@ -32,6 +32,7 @@ require_once BASE_PATH . '/AnnouncementController.php';
 require_once BASE_PATH . '/MemoController.php';
 require_once BASE_PATH . '/UploadController.php';
 require_once BASE_PATH . '/VisitController.php';
+require_once BASE_PATH . '/UserController.php';
 require_once BASE_PATH . '/HomeController.php';
 
 $request = $_GET['page'] ?? 'home';
@@ -96,6 +97,17 @@ switch ($request) {
         requireAuth();
         $ctrl = new VisitController();
         $ctrl->index();
+        break;
+    case 'users':
+        requireAuth();
+        $ctrl = new UserController();
+        if ($action === 'store' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            $ctrl->store();
+        } elseif ($action === 'delete') {
+            $ctrl->delete($_GET['id'] ?? 0);
+        } else {
+            $ctrl->index();
+        }
         break;
     default:
     case 'home':

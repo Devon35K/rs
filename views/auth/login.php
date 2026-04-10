@@ -82,15 +82,16 @@
 
                     <!-- Email -->
                     <div class="lf-group">
-                        <label class="lf-label" for="email">Employee Email</label>
+                        <label class="lf-label" for="email">Employee / Staff Email</label>
                         <div class="lf-input-wrap">
                             <svg class="lf-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                                 <polyline points="22,6 12,13 2,6" />
                             </svg>
                             <input type="email" id="email" name="email" class="lf-input"
-                                placeholder="employee@school.edu" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
-                                required autocomplete="email">
+                                placeholder="yourname@usep.edu.ph" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
+                                required autocomplete="email" pattern=".+@usep\.edu\.ph"
+                                title="Only @usep.edu.ph email addresses are accepted">
                         </div>
                     </div>
 

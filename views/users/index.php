@@ -145,7 +145,7 @@ $totalUsers = count($users);
                 <div class="mm-row-2">
                     <div class="mm-field">
                         <label class="mm-label" for="um_email">Email Address <span class="mm-req">*</span></label>
-                        <input class="mm-input" type="email" id="um_email" name="email" placeholder="juan@school.edu" required>
+                        <input class="mm-input" type="email" id="um_email" name="email" placeholder="yourname@usep.edu.ph" required pattern=".+@usep\.edu\.ph" title="Only @usep.edu.ph addresses are allowed">
                     </div>
                     <div class="mm-field">
                         <label class="mm-label" for="um_password">Initial Password <span class="mm-req">*</span></label>

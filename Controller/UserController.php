@@ -31,6 +31,14 @@ class UserController {
             exit;
         }
 
+        // Enforce @usep.edu.ph domain
+        $emailDomain = strtolower(substr(strrchr($email, '@'), 1));
+        if ($emailDomain !== 'usep.edu.ph') {
+            $_SESSION['error'] = 'Only @usep.edu.ph email addresses are allowed.';
+            header('Location: index.php?page=users');
+            exit;
+        }
+
         $userModel = new User();
         
         // Check if email already exists

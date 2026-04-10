@@ -288,13 +288,15 @@ http://localhost/rs/public/index.php
 
 ## 🔑 Default Login Credentials
 
-| Field    | Value               |
-|----------|---------------------|
-| Email    | `admin@school.edu`  |
-| Password | `password`          |
-| Role     | Admin               |
+| Field    | Value                   |
+|----------|-------------------------|
+| Email    | `admin@usep.edu.ph`     |
+| Password | `password`              |
+| Role     | Admin                   |
 
 > ⚠️ Change the default admin password immediately after your first login in a production environment.
+
+> 🔒 **Domain Restriction:** Only `@usep.edu.ph` email addresses are accepted for login and account creation. Attempts to use any other domain will be rejected by the server.
 
 ---
 
@@ -344,12 +346,16 @@ post_max_size = 50M
 
 ## 🔧 Adding Users
 
+> 🔒 All accounts must use `@usep.edu.ph` email addresses. Other domains are rejected at both the UI and server level.
+
+The easiest way to create accounts is through the **Accounts** page in the admin panel (sidebar → Accounts → Add Account).
+
 To manually create faculty or student accounts, insert directly into the `users` table:
 
 ```sql
 INSERT INTO users (name, email, password, role) VALUES
-('Maria Santos', 'maria@school.edu', '$2y$12$HASHED_PASSWORD_HERE', 'faculty'),
-('Pedro Reyes',  'pedro@school.edu', '$2y$12$HASHED_PASSWORD_HERE', 'student');
+('Maria Santos', 'maria@usep.edu.ph', '$2y$12$HASHED_PASSWORD_HERE', 'faculty'),
+('Pedro Reyes',  'pedro@usep.edu.ph', '$2y$12$HASHED_PASSWORD_HERE', 'student');
 ```
 
 To generate a valid bcrypt hash for any password, create a temporary file in `public/` called `hash.php`:

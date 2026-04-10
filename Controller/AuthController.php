@@ -25,6 +25,14 @@ class AuthController {
             exit;
         }
 
+        // Enforce @usep.edu.ph domain
+        $emailDomain = strtolower(substr(strrchr($email, '@'), 1));
+        if ($emailDomain !== 'usep.edu.ph') {
+            $_SESSION['error'] = 'Only @usep.edu.ph email addresses are allowed.';
+            header('Location: index.php?page=admin');
+            exit;
+        }
+
         $user = $this->userModel->findByEmail($email);
 
         if (!$user || !password_verify($password, $user['password'])) {

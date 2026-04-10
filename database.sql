@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS visit_logs (
 -- Seed default admin (password: 'password' — hashed with PHP password_hash)
 -- Hash below generated with: password_hash('password', PASSWORD_DEFAULT)
 INSERT INTO users (name, email, password, role) VALUES
-('Administrator', 'admin@school.edu', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin')
+('Administrator', 'admin@usep.edu.ph', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin')
 ON DUPLICATE KEY UPDATE password = VALUES(password);
--- Default credentials: admin@school.edu / password
+-- Default credentials: admin@usep.edu.ph / password
 -- NOTE: If login fails after fresh import, run fixpw.php to regenerate hash on this machine.

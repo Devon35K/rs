@@ -25,7 +25,7 @@ $catColors = [
 <!-- ══════════════════════════════════════════════════
      HERO
 ══════════════════════════════════════════════════ -->
-<div class="memo-hero">
+<div class="memo-hero" style="background-image: url('<?= BASE_URL ?>icon/backbird.png');">
     <div class="memo-hero-overlay"></div>
     <div class="memo-hero-content">
         <p class="memo-hero-eyebrow">
@@ -185,7 +185,7 @@ $catColors = [
                     View
                 </a>
             <?php elseif (!empty($memo['file_path'])): ?>
-                <a href="<?= htmlspecialchars($memo['file_path']) ?>" target="_blank" class="mi-doc-btn mi-doc-btn--file">
+                <a href="<?= BASE_URL . 'public/' . htmlspecialchars($memo['file_path']) ?>" target="_blank" class="mi-doc-btn mi-doc-btn--file">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                     Download
                 </a>
@@ -369,7 +369,7 @@ function openViewMemoModal(data) {
         iframe.style.display = 'block';
     } else if (data.file_path) {
         let isPdf = data.file_path.toLowerCase().endsWith('.pdf');
-        let fullPath = '<?= BASE_URL ?>' + data.file_path;
+        let fullPath = '<?= BASE_URL ?>public/' + data.file_path;
         if (isPdf) {
             iframe.src = fullPath;
             iframe.style.display = 'block';

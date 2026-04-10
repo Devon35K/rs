@@ -12,7 +12,7 @@ if (php_sapi_name() !== 'cli' && !isset($_GET['secure_key'])) {
     exit;
 }
 
-require_once __DIR__ . '/index.php'; // This loads .env and defines BASE_PATH
+require_once __DIR__ . '/../index.php'; // This loads .env and defines BASE_PATH
 require_once __DIR__ . '/database.php';
 
 try {

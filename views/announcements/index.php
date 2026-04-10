@@ -4,7 +4,7 @@ $canPost = in_array($_SESSION['user_role'] ?? '', ['admin', 'faculty']);
 ?>
 
 <!-- ── HERO ── -->
-<div class="admin-hero" style="background-image: url('<?= BASE_URL ?>backbird.png');">
+<div class="admin-hero" style="background-image: url('<?= BASE_URL ?>icon/backbird.png');">
     <div class="admin-hero-overlay"></div>
     <div class="admin-hero-content">
         <p class="admin-hero-eyebrow">
@@ -65,7 +65,7 @@ $canPost = in_array($_SESSION['user_role'] ?? '', ['admin', 'faculty']);
             onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
             <div class="announce-thumb">
                 <?php if (!empty($a['cover_image'])): ?>
-                <img src="<?= BASE_URL . htmlspecialchars($a['cover_image']) ?>" alt="">
+                <img src="<?= BASE_URL . 'public/' . htmlspecialchars($a['cover_image']) ?>" alt="">
                 <?php else: ?>
                 <div class="announce-thumb-placeholder">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
@@ -200,7 +200,7 @@ function openViewAnnouncementModal(data) {
     document.getElementById('vaDate').textContent = new Date(data.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
     if (data.cover_image) {
-        document.getElementById('vaCover').src = '<?= BASE_URL ?>' + data.cover_image;
+        document.getElementById('vaCover').src = '<?= BASE_URL ?>public/' + data.cover_image;
         document.getElementById('vaCover').style.display = 'block';
         document.getElementById('vaPlaceholder').style.display = 'none';
     } else {

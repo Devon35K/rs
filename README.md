@@ -142,50 +142,51 @@ Documents restricted to **Faculty Only** or **Students Only** are hidden from th
 
 ```
 rs/
-├── app/
-│   ├── Controllers/
-│   │   ├── AuthController.php          # Handles login, logout, and session management
-│   │   ├── AnnouncementController.php  # CRUD for announcements
-│   │   ├── MemoController.php          # CRUD for memoranda
-│   │   ├── UploadController.php        # File upload and document management
-│   │   ├── GuestController.php         # Public guest page — no authentication required
-│   │   └── VisitController.php         # Analytics dashboard (admin only)
-│   ├── Models/
-│   │   ├── User.php                    # User queries and lookups
-│   │   ├── Announcement.php            # Announcement database queries
-│   │   ├── Memo.php                    # Memo database queries
-│   │   └── Document.php                # Document and file database queries
-│   └── Views/
-│       ├── layouts/
-│       │   ├── main.php                # Authenticated layout with full navbar and user menu
-│       │   └── guest.php               # Guest layout with login button, no user menu
-│       ├── auth/
-│       │   └── login.php               # Login page with campus background and card
-│       ├── guest/
-│       │   └── index.php               # Public guest page — announcements, memos, and files
-│       ├── announcements/
-│       │   └── index.php               # Announcements card grid with post modal
-│       ├── memo/
-│       │   └── index.php               # Memo data table with add memo modal
-│       ├── upload/
-│       │   └── index.php               # Document card grid with upload modal
-│       └── visit/
-│           └── index.php               # Admin analytics dashboard with stats and logs
 ├── config/
-│   └── database.php                    # PDO database connection and credentials
-├── public/                             ← Set this folder as your web server root
-│   ├── index.php                       # Front controller and URL router
-│   ├── .htaccess                       # Apache mod_rewrite rules
-│   ├── css/
-│   │   └── app.css                     # All styles — crimson theme, layout, responsive
-│   ├── js/
-│   │   └── app.js                      # Modals, table sort and filter, drag-and-drop
-│   └── uploads/                        ← Created automatically on first file upload
-│       ├── images/                     # Announcement cover images
-│       ├── memos/                      # Memo PDF and DOC attachments
-│       └── documents/                  # Uploaded academic files
-├── database.sql                        # Full database schema and default admin seed
-├── .htaccess                           # Redirects root requests to /public
+│   ├── database.php                    # PDO database connection
+│   ├── google_config.php               # Google Auth settings
+│   └── migrate.php                     # Migration script
+├── Controller/                         # All application controllers
+│   ├── AnnouncementController.php
+│   ├── AuthController.php
+│   ├── HomeController.php
+│   ├── MemoController.php
+│   ├── UploadController.php
+│   ├── UserController.php              # Accounts management
+│   └── VisitController.php
+├── css/                                # Stylesheets
+│   ├── app.css
+│   └── style.css
+├── icon/                               # Application icons and backgrounds
+│   ├── backbird.png
+│   └── background.png
+├── js/                                 # Scripts
+│   ├── app.js
+│   └── main.js
+├── Models/                             # Database models
+│   ├── Announcement.php
+│   ├── Document.php
+│   ├── Memo.php
+│   └── User.php
+├── public/
+│   └── uploads/                        # Automatically created
+│       ├── documents/
+│       ├── images/
+│       └── memos/
+├── views/                              # Presentation layers
+│   ├── announcements/
+│   ├── auth/
+│   ├── home/
+│   ├── layouts/
+│   ├── memos/
+│   ├── uploads/
+│   ├── users/
+│   └── visits/
+├── .env                                # Local environment variables
+├── .gitattributes
+├── .htaccess                           # Apache mod_rewrite rules
+├── database.sql                        # Original DB schema
+├── index.php                           # Main application router
 └── README.md
 ```
 

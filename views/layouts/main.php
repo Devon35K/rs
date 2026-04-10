@@ -6,7 +6,7 @@
     <title><?= htmlspecialchars($pageTitle ?? 'BSIT Department') ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?= BASE_URL ?>style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/style.css">
 </head>
 <body class="admin-body">
 

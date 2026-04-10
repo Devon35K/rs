@@ -2278,7 +2278,7 @@ tbody td a:hover {
 .va-hero {
   position: relative;
   height: 200px;
-  background: url('backbird.png') center 30% / cover no-repeat;
+  background: url('../icon/backbird.png') center 30% / cover no-repeat;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -2756,7 +2756,7 @@ tbody td a:hover {
 .memo-hero {
   position: relative;
   min-height: 180px;
-  background: url('backbird.png') center 38% / cover no-repeat;
+  background: url('../icon/backbird.png') center 38% / cover no-repeat;
   display: flex;
   align-items: center;
   overflow: hidden;

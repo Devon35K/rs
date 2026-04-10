@@ -7,7 +7,7 @@ $totalUsers = count($users);
 <!-- ══════════════════════════════════════════════════
      HERO
 ══════════════════════════════════════════════════ -->
-<div class="memo-hero">
+<div class="memo-hero" style="background-image: url('<?= BASE_URL ?>icon/backbird.png');">
     <div class="memo-hero-overlay"></div>
     <div class="memo-hero-content">
         <p class="memo-hero-eyebrow">

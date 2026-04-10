@@ -22,18 +22,18 @@ if (file_exists(BASE_PATH . '/.env')) {
     }
 }
 
-require_once BASE_PATH . '/database.php';
-require_once BASE_PATH . '/User.php';
-require_once BASE_PATH . '/Announcement.php';
-require_once BASE_PATH . '/Memo.php';
-require_once BASE_PATH . '/Document.php';
-require_once BASE_PATH . '/AuthController.php';
-require_once BASE_PATH . '/AnnouncementController.php';
-require_once BASE_PATH . '/MemoController.php';
-require_once BASE_PATH . '/UploadController.php';
-require_once BASE_PATH . '/VisitController.php';
-require_once BASE_PATH . '/UserController.php';
-require_once BASE_PATH . '/HomeController.php';
+require_once BASE_PATH . '/config/database.php';
+require_once BASE_PATH . '/Models/User.php';
+require_once BASE_PATH . '/Models/Announcement.php';
+require_once BASE_PATH . '/Models/Memo.php';
+require_once BASE_PATH . '/Models/Document.php';
+require_once BASE_PATH . '/Controller/AuthController.php';
+require_once BASE_PATH . '/Controller/AnnouncementController.php';
+require_once BASE_PATH . '/Controller/MemoController.php';
+require_once BASE_PATH . '/Controller/UploadController.php';
+require_once BASE_PATH . '/Controller/VisitController.php';
+require_once BASE_PATH . '/Controller/UserController.php';
+require_once BASE_PATH . '/Controller/HomeController.php';
 
 $request = $_GET['page'] ?? 'home';
 $action  = $_GET['action'] ?? 'index';

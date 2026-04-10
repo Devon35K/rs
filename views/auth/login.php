@@ -10,7 +10,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="<?= BASE_URL ?>style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/style.css">
 </head>
 
 <body class="login-body">
@@ -18,7 +18,7 @@
 
 
     <!-- ── FULL-SCREEN BACKGROUND ── -->
-    <div class="login-bg" style="background-image: url('<?= BASE_URL ?>background.png');"></div>
+    <div class="login-bg" style="background-image: url('<?= BASE_URL ?>icon/background.png');"></div>
     <div class="login-scene-overlay"></div>
 
     <!-- ── LOGIN CARD ── -->

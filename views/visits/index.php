@@ -3,7 +3,7 @@
 <!-- ══════════════════════════════════════════════════
      ANALYTICS HERO
 ══════════════════════════════════════════════════ -->
-<div class="va-hero">
+<div class="va-hero" style="background-image: url('<?= BASE_URL ?>icon/backbird.png');">
     <div class="va-hero-overlay"></div>
     <div class="va-hero-content">
         <div class="va-hero-eyebrow">

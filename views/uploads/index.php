@@ -4,7 +4,7 @@ $canUpload = in_array($_SESSION['user_role'] ?? '', ['admin', 'faculty']);
 ?>
 
 <!-- ── HEADER ── -->
-<div class="admin-hero" style="background-image: url('<?= BASE_URL ?>backbird.png'); padding: 3rem 2rem;">
+<div class="admin-hero" style="background-image: url('<?= BASE_URL ?>icon/backbird.png'); padding: 3rem 2rem;">
     <div class="admin-hero-overlay"></div>
     <div class="admin-hero-content">
         <h1 class="admin-hero-title">Central File Repository</h1>
@@ -74,7 +74,7 @@ $canUpload = in_array($_SESSION['user_role'] ?? '', ['admin', 'faculty']);
                         <?php if (!empty($doc['drive_link'])): ?>
                             <a href="<?= htmlspecialchars($doc['drive_link']) ?>" target="_blank" class="mi-doc-btn mi-doc-btn--link">Open Link</a>
                         <?php else: ?>
-                            <a href="<?= BASE_URL . htmlspecialchars($doc['file_path']) ?>" target="_blank" class="mi-doc-btn mi-doc-btn--file">Download</a>
+                            <a href="<?= BASE_URL . 'public/' . htmlspecialchars($doc['file_path']) ?>" target="_blank" class="mi-doc-btn mi-doc-btn--file">Download</a>
                         <?php endif; ?>
                     </div>
                     <?php if ($canUpload): ?>

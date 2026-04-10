@@ -23,7 +23,7 @@ $catColors = [
 ?>
 
 <!-- ── HERO ── -->
-<div class="admin-hero" style="background-image: url('<?= BASE_URL ?>backbird.png');">
+<div class="admin-hero" style="background-image: url('<?= BASE_URL ?>icon/backbird.png');">
     <div class="admin-hero-overlay"></div>
     <div class="admin-hero-content">
         <p class="admin-hero-eyebrow">
@@ -67,7 +67,7 @@ $catColors = [
         <article class="announce-card" style="margin-bottom:1rem; cursor: pointer; transition: transform 0.2s; position:relative;" onclick='openViewAnnouncementModal(<?= htmlspecialchars(json_encode($a), ENT_QUOTES, "UTF-8") ?>)' onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
             <div class="announce-thumb">
                 <?php if (!empty($a['cover_image'])): ?>
-                <img src="<?= BASE_URL . htmlspecialchars($a['cover_image']) ?>" alt="">
+                <img src="<?= BASE_URL . 'public/' . htmlspecialchars($a['cover_image']) ?>" alt="">
                 <?php else: ?>
                 <div class="announce-thumb-placeholder">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
@@ -178,7 +178,7 @@ $catColors = [
                 <?php if (!empty($memo['link'])): ?>
                     <a href="<?= htmlspecialchars($memo['link']) ?>" target="_blank" class="mi-doc-btn mi-doc-btn--link">View</a>
                 <?php elseif (!empty($memo['file_path'])): ?>
-                    <a href="<?= htmlspecialchars($memo['file_path']) ?>" target="_blank" class="mi-doc-btn mi-doc-btn--file">Download</a>
+                    <a href="<?= BASE_URL . 'public/' . htmlspecialchars($memo['file_path']) ?>" target="_blank" class="mi-doc-btn mi-doc-btn--file">Download</a>
                 <?php else: ?>
                     <span class="mi-doc-none">—</span>
                 <?php endif; ?>
@@ -381,7 +381,7 @@ function openViewAnnouncementModal(data) {
     document.getElementById('vaDate').textContent = new Date(data.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
     if (data.cover_image) {
-        document.getElementById('vaCover').src = '<?= BASE_URL ?>' + data.cover_image;
+        document.getElementById('vaCover').src = '<?= BASE_URL ?>public/' + data.cover_image;
         document.getElementById('vaCover').style.display = 'block';
         document.getElementById('vaPlaceholder').style.display = 'none';
     } else {
@@ -409,7 +409,7 @@ function openViewMemoModal(data) {
         iframe.style.display = 'block';
     } else if (data.file_path) {
         let isPdf = data.file_path.toLowerCase().endsWith('.pdf');
-        let fullPath = '<?= BASE_URL ?>' + data.file_path;
+        let fullPath = '<?= BASE_URL ?>public/' + data.file_path;
         if (isPdf) {
             iframe.src = fullPath;
             iframe.style.display = 'block';

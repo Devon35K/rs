@@ -1,5 +1,5 @@
 <?php
-require_once BASE_PATH . '/google_config.php';
+require_once BASE_PATH . '/config/google_config.php';
 class AuthController {
     private User $userModel;
 

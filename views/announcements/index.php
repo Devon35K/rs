@@ -14,10 +14,12 @@ $canPost = in_array($_SESSION['user_role'] ?? '', ['admin', 'faculty']);
         <h1 class="admin-hero-title">Announcements</h1>
         <p class="admin-hero-sub">Stay up-to-date with the latest news, memos, and updates from the institution.</p>
         <?php if ($canPost): ?>
-        <button class="admin-hero-btn" onclick="openModal('announcementModal')">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Post Announcement
-        </button>
+        <div style="margin-top:20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            <button class="admin-hero-btn" onclick="openModal('announcementModal')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Post Announcement
+            </button>
+        </div>
         <?php endif; ?>
     </div>
 </div>
@@ -131,6 +133,13 @@ $canPost = in_array($_SESSION['user_role'] ?? '', ['admin', 'faculty']);
                     <input type="file" name="cover_image" accept="image/*">
                 </div>
             </div>
+            <div class="form-group">
+                <label>Document Attachment (PDF/Doc/Excel)</label>
+                <div style="background: #f1f5f9; padding: 1rem; border-radius: 8px; border: 1px dashed #cbd5e1;">
+                    <input type="file" name="attachment" accept=".pdf,.doc,.docx,.xls,.xlsx">
+                    <p style="font-size: 0.75rem; color: #64748b; margin-top: 0.5rem;">Files will be automatically sorted into the Google Drive "Announcements" folder.</p>
+                </div>
+            </div>
             <div class="modal-footer">
                 <button type="button" onclick="closeModal('announcementModal')" class="btn-secondary">Cancel</button>
                 <button type="submit" class="btn-primary">Post Announcement</button>
@@ -159,6 +168,14 @@ $canPost = in_array($_SESSION['user_role'] ?? '', ['admin', 'faculty']);
                 <span id="vaAuthor"></span>
             </div>
             <div id="vaBody" style="color:#334155; line-height:1.7; font-size:1.05rem; white-space:pre-wrap;"></div>
+            
+            <div id="vaAttachmentRow" style="margin-top:2rem; padding-top:1.5rem; border-top:1px solid #f1f5f9; display:none;">
+                <h4 style="font-size:0.85rem; color:#64748b; margin-top:0; margin-bottom:0.75rem;">ATTACHED DOCUMENT</h4>
+                <a id="vaAttachmentLink" href="" target="_blank" class="admin-btn-primary" style="display:inline-flex; text-decoration:none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download Attachment
+                </a>
+            </div>
         </div>
     </div>
 </div>
@@ -206,6 +223,13 @@ function openViewAnnouncementModal(data) {
     } else {
         document.getElementById('vaCover').style.display = 'none';
         document.getElementById('vaPlaceholder').style.display = 'block';
+    }
+    
+    if (data.drive_link) {
+        document.getElementById('vaAttachmentRow').style.display = 'block';
+        document.getElementById('vaAttachmentLink').href = data.drive_link;
+    } else {
+        document.getElementById('vaAttachmentRow').style.display = 'none';
     }
     
     openModal('viewAnnouncementModal');

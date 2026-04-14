@@ -20,3 +20,9 @@ define('GOOGLE_REDIRECT_URI',  getenv('GOOGLE_REDIRECT_URI') ?: 'http://localhos
  * Change this if your institution uses a different domain.
  */
 define('GOOGLE_ALLOWED_DOMAIN', getenv('GOOGLE_ALLOWED_DOMAIN') ?: 'usep.edu.ph');
+
+/**
+ * The Root Folder ID in Google Drive where the system will store its data.
+ * All module folders (Repository, Memos, etc.) will be created inside this folder.
+ */
+define('GOOGLE_DRIVE_PARENT_ID', getenv('GOOGLE_DRIVE_PARENT_ID') ?: '');

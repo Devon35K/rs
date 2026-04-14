@@ -83,27 +83,45 @@ class User {
         $stmt->execute([$googleUser['email']]);
         $user = $stmt->fetch();
         if ($user) {
-            // Attach google_id and avatar to existing account
-            $this->db->prepare("UPDATE users SET google_id = ?, avatar = ? WHERE id = ?")
-                ->execute([$googleUser['google_id'], $googleUser['avatar'] ?? null, $user['id']]);
+            // Attach google_id, avatar and refresh_token to existing account
+            $this->db->prepare("UPDATE users SET google_id = ?, avatar = ?, google_refresh_token = COALESCE(?, google_refresh_token) WHERE id = ?")
+                ->execute([
+                    $googleUser['google_id'], 
+                    $googleUser['avatar'] ?? null, 
+                    $googleUser['refresh_token'] ?? null,
+                    $user['id']
+                ]);
             return array_merge($user, [
                 'google_id' => $googleUser['google_id'],
                 'avatar'    => $googleUser['avatar'] ?? $user['avatar'],
+                'google_refresh_token' => $googleUser['refresh_token'] ?? $user['google_refresh_token']
             ]);
         }
 
         // 3. Create new Google-only account
         $this->db->prepare(
-            "INSERT INTO users (name, email, password, role, avatar, google_id) VALUES (?, ?, NULL, 'faculty', ?, ?)"
+            "INSERT INTO users (name, email, password, role, avatar, google_id, google_refresh_token) VALUES (?, ?, NULL, 'faculty', ?, ?, ?)"
         )->execute([
             $googleUser['name'],
             $googleUser['email'],
             $googleUser['avatar'] ?? null,
             $googleUser['google_id'],
+            $googleUser['refresh_token'] ?? null
         ]);
 
         $stmt = $this->db->prepare("SELECT * FROM users WHERE id = ? LIMIT 1");
         $stmt->execute([$this->db->lastInsertId()]);
         return $stmt->fetch();
+    }
+
+    public function updateRefreshToken(int $id, string $token): bool {
+        $stmt = $this->db->prepare("UPDATE users SET google_refresh_token = ? WHERE id = ?");
+        return $stmt->execute([$token, $id]);
+    }
+
+    public function getMasterRefreshToken(): ?string {
+        // We look for the first admin who has a refresh token
+        $stmt = $this->db->query("SELECT google_refresh_token FROM users WHERE role = 'admin' AND google_refresh_token IS NOT NULL LIMIT 1");
+        return $stmt->fetchColumn() ?: null;
     }
 }

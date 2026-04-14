@@ -73,11 +73,11 @@ class AuthController {
             'client_id'     => GOOGLE_CLIENT_ID,
             'redirect_uri'  => GOOGLE_REDIRECT_URI,
             'response_type' => 'code',
-            'scope'         => 'openid email profile',
+            'scope'         => 'openid email profile https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive',
             'hd'            => GOOGLE_ALLOWED_DOMAIN,   // restrict to usep.edu.ph
             'state'         => $state,
-            'prompt'        => 'select_account',
-            'access_type'   => 'online',
+            'prompt'        => 'consent',               // force consent to ensure we get a refresh token
+            'access_type'   => 'offline',
         ]);
 
         header('Location: https://accounts.google.com/o/oauth2/v2/auth?' . $params);
@@ -138,11 +138,17 @@ class AuthController {
 
         // Find or create the user record
         $user = $this->userModel->findOrCreateByGoogle([
-            'google_id' => $profile['sub']  ?? $profile['id'] ?? '',
-            'name'      => $profile['name'] ?? $profile['email'],
-            'email'     => $profile['email'],
-            'avatar'    => $profile['picture'] ?? null,
+            'google_id'     => $profile['sub']  ?? $profile['id'] ?? '',
+            'name'          => $profile['name'] ?? $profile['email'],
+            'email'         => $profile['email'],
+            'avatar'        => $profile['picture'] ?? null,
+            'refresh_token' => $tokenData['refresh_token'] ?? null,
         ]);
+
+        // If user already existed but we got a NEW refresh token, update it
+        if ($user && !empty($tokenData['refresh_token'])) {
+            $this->userModel->updateRefreshToken($user['id'], $tokenData['refresh_token']);
+        }
 
         if (!$user) {
             $_SESSION['error'] = 'Could not sign you in. Please contact support.';
@@ -162,34 +168,44 @@ class AuthController {
         exit;
     }
 
-    /** Exchange authorization code for token via cURL */
+    /** Exchange authorization code for token via native streams (cURL fallback) */
     private function googleExchangeCode(string $code): array {
-        $ch = curl_init('https://oauth2.googleapis.com/token');
-        curl_setopt_array($ch, [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST           => true,
-            CURLOPT_POSTFIELDS     => http_build_query([
-                'code'          => $code,
-                'client_id'     => GOOGLE_CLIENT_ID,
-                'client_secret' => GOOGLE_CLIENT_SECRET,
-                'redirect_uri'  => GOOGLE_REDIRECT_URI,
-                'grant_type'    => 'authorization_code',
-            ]),
-        ]);
-        $response = curl_exec($ch);
-        curl_close($ch);
+        $url = 'https://oauth2.googleapis.com/token';
+        $data = [
+            'code'          => $code,
+            'client_id'     => GOOGLE_CLIENT_ID,
+            'client_secret' => GOOGLE_CLIENT_SECRET,
+            'redirect_uri'  => GOOGLE_REDIRECT_URI,
+            'grant_type'    => 'authorization_code',
+        ];
+
+        $options = [
+            'http' => [
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query($data),
+                'ignore_errors' => true
+            ]
+        ];
+
+        $context  = stream_context_create($options);
+        $response = file_get_contents($url, false, $context);
         return json_decode($response, true) ?: [];
     }
 
-    /** Fetch the signed-in user's profile from Google */
+    /** Fetch the signed-in user's profile from Google via native streams */
     private function googleFetchProfile(string $accessToken): array {
-        $ch = curl_init('https://www.googleapis.com/oauth2/v3/userinfo');
-        curl_setopt_array($ch, [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . $accessToken],
-        ]);
-        $response = curl_exec($ch);
-        curl_close($ch);
+        $url = 'https://www.googleapis.com/oauth2/v3/userinfo';
+        $options = [
+            'http' => [
+                'header' => "Authorization: Bearer " . $accessToken . "\r\n",
+                'method' => 'GET',
+                'ignore_errors' => true
+            ]
+        ];
+
+        $context  = stream_context_create($options);
+        $response = file_get_contents($url, false, $context);
         return json_decode($response, true) ?: [];
     }
 

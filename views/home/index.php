@@ -330,6 +330,14 @@ $catColors = [
                 <span id="vaAuthor"></span>
             </div>
             <div id="vaBody" style="color:#334155; line-height:1.7; font-size:1.05rem; white-space:pre-wrap;"></div>
+            
+            <div id="vaAttachmentRow" style="margin-top:2rem; padding-top:1.5rem; border-top:1px solid #f1f5f9; display:none;">
+                <h4 style="font-size:0.85rem; color:#64748b; margin-top:0; margin-bottom:0.75rem;">ATTACHED DOCUMENT</h4>
+                <a id="vaAttachmentLink" href="" target="_blank" class="admin-btn-primary" style="display:inline-flex; text-decoration:none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download Attachment
+                </a>
+            </div>
         </div>
     </div>
 </div>
@@ -387,6 +395,13 @@ function openViewAnnouncementModal(data) {
     } else {
         document.getElementById('vaCover').style.display = 'none';
         document.getElementById('vaPlaceholder').style.display = 'block';
+    }
+    
+    if (data.drive_link) {
+        document.getElementById('vaAttachmentRow').style.display = 'block';
+        document.getElementById('vaAttachmentLink').href = data.drive_link;
+    } else {
+        document.getElementById('vaAttachmentRow').style.display = 'none';
     }
     
     openModal('viewAnnouncementModal');

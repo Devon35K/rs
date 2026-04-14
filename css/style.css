@@ -3617,3 +3617,41 @@ tbody td a:hover {
   .memo-toolbar-right     { width: 100%; justify-content: space-between; }
   .memo-searchbox-input   { width: 100%; }
 }
+/* ── Google Drive Topbar Integration ── */
+.topbar-sync-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.topbar-sync-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.topbar-sync-btn svg {
+  transition: transform 0.4s ease;
+}
+
+.topbar-sync-btn:hover svg {
+  transform: rotate(180deg);
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}

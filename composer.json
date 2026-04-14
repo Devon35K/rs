@@ -1,0 +1,19 @@
+{
+    "name": "devon35k/rs",
+    "description": "Reporting System with Google Drive Integration",
+    "type": "project",
+    "require": {
+        "google/apiclient": "^2.19",
+        "phpmailer/phpmailer": "^7.0"
+    },
+    "authors": [
+        {
+            "name": "Antigravity"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Services\\": "Services/"
+        }
+    }
+}

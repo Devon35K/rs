@@ -33,6 +33,36 @@
             <?= htmlspecialchars($_SESSION['success']) ?>
         </div>
         <?php unset($_SESSION['success']); endif; ?>
+        
+        <!-- Google Drive Persistence -->
+        <?php 
+        if ($_SESSION['user_role'] === 'admin'): 
+            $drive = new \Services\GoogleDriveService();
+            if ($drive->isReady()):
+                $currentPage = $_GET['page'] ?? 'announcements';
+                // Map page to action
+                $syncAction = ($currentPage === 'announcements') ? 'announcements&action=sync' : (($currentPage === 'memo') ? 'memo&action=sync' : 'upload&action=sync');
+        ?>
+                <div style="display:flex; align-items:center; gap:12px; margin-right:20px; padding-right:20px; border-right:1px solid #e2e8f0;">
+                    <div title="Google Drive Connected" style="display:flex; align-items:center; background: #dcfce7; color: #166534; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; gap:6px;">
+                        <span style="display:inline-block; width:6px; height:6px; background:#22c55e; border-radius:50%;"></span>
+                        Drive Active
+                    </div>
+                    <a href="index.php?page=<?= $syncAction ?>" class="topbar-sync-btn" title="Sync current module with Drive">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                        <span>Sync Drive</span>
+                    </a>
+                </div>
+            <?php else: ?>
+                <div title="Authorization Pending" style="display:flex; align-items:center; gap:12px; margin-right:20px; padding-right:20px; border-right:1px solid #e2e8f0;">
+                    <div style="display:flex; align-items:center; background: #fee2e2; color: #991b1b; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; gap:6px;">
+                        <span style="display:inline-block; width:6px; height:6px; background:#ef4444; border-radius:50%; animation: pulse 2s infinite;"></span>
+                        Drive Disconnected
+                    </div>
+                    <a href="index.php?page=logout" style="font-size: 0.75rem; color: #b91c1c; font-weight: 700; text-decoration: underline;">Fix Now</a>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
 
         <div class="topbar-user" id="userDropdownTrigger">
             <div class="topbar-avatar">
@@ -187,6 +217,118 @@ if (userTrigger) {
 // Auto-dismiss flash
 const flash = document.getElementById('flashMsg');
 if (flash) setTimeout(() => flash && flash.remove(), 5000);
+
+// --- Real-time Drive Polling ---
+<?php if (($_SESSION['user_role'] ?? '') === 'admin'): ?>
+(function() {
+    let lastCheck = 0;
+    const interval = 30000; // 30 seconds
+    const page = '<?= $_GET['page'] ?? 'home' ?>';
+    
+    // Only poll on document-heavy pages
+    const syncablePages = ['upload', 'announcements', 'memo', 'home'];
+    if (!syncablePages.includes(page)) return;
+
+    function checkForUpdates() {
+        const url = `index.php?page=${page}&action=ajaxSync`;
+        
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success' && data.changesDetected) {
+                    notifyUpdates(data.counts);
+                }
+            })
+            .catch(err => console.error('Sync Poller Error:', err));
+    }
+
+    function notifyUpdates(counts) {
+        const syncBtn = document.querySelector('.topbar-sync-btn');
+        if (syncBtn) syncBtn.classList.add('sync-pending');
+
+        const msg = [];
+        if (counts.imported > 1) msg.push(`${counts.imported} new files found`);
+        else if (counts.imported === 1) msg.push(`1 new file found`);
+        
+        if (counts.purged > 0) msg.push(`${counts.purged} files removed`);
+        if (counts.uploaded > 0) msg.push(`${counts.uploaded} files synced to cloud`);
+
+        if (msg.length > 0) {
+            showToast(`Cloud Update: ${msg.join(', ')}. Refreshing dashboard...`);
+            // Optional: Auto-reload after a delay or just update the table
+            setTimeout(() => location.reload(), 3000);
+        }
+    }
+
+    function showToast(text) {
+        let toast = document.createElement('div');
+        toast.className = 'sync-toast';
+        toast.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            <span>${text}</span>
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.classList.add('show'), 100);
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 500);
+        }, 6000);
+    }
+
+    setInterval(checkForUpdates, interval);
+})();
+<?php endif; ?>
 </script>
+
+<style>
+.sync-pending {
+    animation: pulse-gold 2s infinite;
+    border-color: #d97706 !important;
+    background: #fffbeb !important;
+    color: #92400e !important;
+}
+
+@keyframes pulse-gold {
+    0% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(217, 119, 6, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0); }
+}
+
+.sync-toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: #0f172a;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    z-index: 10000;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.sync-toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.sync-toast svg {
+    color: #fbbf24;
+    animation: rotate-sync 2s linear infinite;
+}
+
+@keyframes rotate-sync {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+</style>
 </body>
 </html>

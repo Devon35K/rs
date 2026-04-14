@@ -1,6 +1,7 @@
 <?php
-session_start();
 define('BASE_PATH', __DIR__);
+require_once BASE_PATH . '/vendor/autoload.php';
+session_start();
 $scriptDir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
 define('BASE_URL', $scriptDir === '' ? '/' : $scriptDir . '/');
 
@@ -22,6 +23,7 @@ if (file_exists(BASE_PATH . '/.env')) {
     }
 }
 
+require_once BASE_PATH . '/config/google_config.php';
 require_once BASE_PATH . '/config/database.php';
 require_once BASE_PATH . '/Models/User.php';
 require_once BASE_PATH . '/Models/Announcement.php';

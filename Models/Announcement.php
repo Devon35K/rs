@@ -44,15 +44,47 @@ class Announcement {
     }
 
     public function create($data) {
-        $stmt = $this->db->prepare("INSERT INTO announcements (title, body, audience, cover_image, user_id) 
-                                    VALUES (?, ?, ?, ?, ?)");
+        $stmt = $this->db->prepare("INSERT INTO announcements (title, body, audience, cover_image, attachment_path, drive_link, drive_file_id, user_id) 
+                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         return $stmt->execute([
             $data['title'],
             $data['body'],
             $data['audience'] ?? 'all',
             $data['cover_image'] ?? null,
+            $data['attachment_path'] ?? null,
+            $data['drive_link'] ?? null,
+            $data['drive_file_id'] ?? null,
             $data['user_id']
         ]);
+    }
+
+    public function findByDriveId(string $driveId): array|false {
+        $stmt = $this->db->prepare("SELECT * FROM announcements WHERE drive_file_id = ?");
+        $stmt->execute([$driveId]);
+        return $stmt->fetch();
+    }
+
+    public function upsertFromDrive(array $data): void {
+        $existing = $this->findByDriveId($data['drive_file_id']);
+        if (!$existing) {
+            $this->create($data);
+        } else {
+            $stmt = $this->db->prepare("UPDATE announcements SET drive_link = ?, title = ? WHERE id = ?");
+            $stmt->execute([$data['drive_link'], $data['title'], $existing['id']]);
+        }
+    }
+
+    public function getUnsynced(): array {
+        return $this->db->query("SELECT * FROM announcements WHERE drive_file_id IS NULL AND attachment_path IS NOT NULL AND attachment_path != ''")->fetchAll();
+    }
+
+    public function updateDriveInfo(int $id, string $driveId, string $driveLink): void {
+        $stmt = $this->db->prepare("UPDATE announcements SET drive_file_id = ?, drive_link = ? WHERE id = ?");
+        $stmt->execute([$driveId, $driveLink, $id]);
+    }
+
+    public function getAllSyncedRecords(): array {
+        return $this->db->query("SELECT id, drive_file_id, attachment_path FROM announcements WHERE drive_file_id IS NOT NULL")->fetchAll();
     }
 
     public function update($id, $data) {

@@ -207,82 +207,75 @@ rs/
 
 ---
 
-## ⚙️ Setup Instructions
+## ⚙️ Setup & Installation Guide
 
-### Step 1 — Requirements
-
-Ensure the following are installed before proceeding:
-- PHP 8.1 or higher
-- MySQL 5.7+ or MariaDB 10.4+
-- Apache with `mod_rewrite` enabled, or use the PHP built-in server
-- XAMPP, Laragon, or WAMP (recommended for local development on Windows)
+### ⚠️ IMPORTANT: Not a Laravel Project
+This application is built with a **Custom PHP MVC Architecture**. Since it does not use the Laravel framework:
+- **DO NOT** use `php artisan` commands.
+- **DO NOT** try to run `php artisan serve`.
+- Follow the specific server instructions below.
 
 ---
 
-### Step 2 — Copy Project Files
-
-Place the `rs/` folder inside your server's web root directory:
-
-| Server | Web Root Directory |
-|--------|--------------------|
-| XAMPP  | `C:/xampp/htdocs/rs/` |
-| WAMP   | `C:/wamp64/www/rs/` |
-| Laragon | `C:/laragon/www/rs/` |
+### Step 1 — System Requirements
+Ensure your environment meets these minimums:
+- **PHP:** 8.1 or higher (with `pdo_mysql`, `curl`, and `openssl` extensions)
+- **Database:** MySQL 5.7+ or MariaDB 10.4+
+- **Composer:** Required for dependency management.
+- **Web Server:** Apache (with `mod_rewrite`) or Nginx.
 
 ---
 
-### Step 3 — Create the Database
-
-Open **phpMyAdmin** and import `database.sql`, or run the following in your terminal:
-
-```bash
-mysql -u root -p < database.sql
-```
-
-This will automatically:
-- Create the `acadportal` database
-- Create all five required tables: `users`, `announcements`, `memos`, `documents`, `visit_logs`
-- Insert the default admin account for first login
+### Step 2 — Project Deployment
+1. **Clone or Copy:** Place the project folder into your web root.
+   - **Laragon:** `C:\laragon\www\rs`
+   - **XAMPP:** `C:\xampp\htdocs\rs`
+2. **Install Dependencies:** Open your terminal in the `rs/` folder and run:
+   ```bash
+   composer install
+   ```
 
 ---
 
-### Step 4 — Configure the Database Connection
-
-Open `config/database.php` and update the values to match your environment:
-
-```php
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'acadportal');
-define('DB_USER', 'root');    // Your MySQL username
-define('DB_PASS', '');        // Your MySQL password — blank by default in XAMPP
-```
+### Step 3 — Database Configuration
+1. **Create Database:** Open phpMyAdmin (or your preferred SQL tool) and create a new database named `acadportal`.
+2. **Import Schema:** Import the `database.sql` file found in the root directory.
+3. **Update Config:** Open `config/database.php` and set your credentials:
+   ```php
+   define('DB_HOST', 'localhost');
+   define('DB_NAME', 'acadportal');
+   define('DB_USER', 'root');
+   define('DB_PASS', 'your_password');
+   ```
 
 ---
 
-### Step 5 — Start the Server
+### Step 4 — Starting the Application
 
-**Option A — XAMPP / WAMP / Laragon**
+#### Option A: Using Laragon (Recommended)
+1. Place the folder in `C:\laragon\www\rs`.
+2. Start Laragon. It will automatically detect the folder and generate a Virtual Host.
+3. Visit: **`http://rs.test`**
 
-Start Apache and MySQL from the control panel, then open your browser to:
-```
-http://localhost/rs/public/
-```
+#### Option B: Using PHP Built-in Server
+1. Open your terminal in the `rs/` folder.
+2. Run the following command:
+   ```bash
+   php -S localhost:8000
+   ```
+3. Visit: **`http://localhost:8000`**
 
-**Option B — PHP Built-in Server via Windsurf Terminal**
+#### Option C: Using XAMPP / Apache
+1. Place the folder in `C:\xampp\htdocs\rs`.
+2. Start Apache and MySQL from the XAMPP Control Panel.
+3. Visit: **`http://localhost/rs/`**
 
-Open the integrated terminal in Windsurf and run:
-```bash
-php -S localhost:8000 -t public/
-```
-Then visit:
-```
-http://localhost:8000
-```
+---
 
-**Option C — Direct URL with XAMPP Running**
-```
-http://localhost/rs/public/index.php
-```
+### Step 5 — Google Drive Setup (Optional)
+If you wish to enable the Google Drive Mirror Sync feature (Real-time Cloud Sync):
+1. Rename `.env.example` to `.env` (if provided) and fill in your Google API credentials.
+2. Refer to [GOOGLE_DRIVE_SETUP.md](file:///d:/App/laragon/www/rs/GOOGLE_DRIVE_SETUP.md) for a full walkthrough on creating your Client ID and Client Secret.
 
 ---
 

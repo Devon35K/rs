@@ -8,6 +8,13 @@ class HomeController {
         $this->memoModel = new Memo();
     }
 
+    public function index(): void {
+        $role = $_SESSION['user_role'] ?? 'guest';
+        $announcements = $this->announcementModel->forAudience($role);
+        $memos         = $this->memoModel->all();
+        require BASE_PATH . '/views/home/index.php';
+    }
+
     public function ajaxSync(): void {
         header('Content-Type: application/json');
         $drive = new \Services\GoogleDriveService();
